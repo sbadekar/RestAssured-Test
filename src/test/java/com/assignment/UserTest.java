@@ -2,12 +2,18 @@ package com.assignment;
 
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.path.json.JsonPath;
+import com.jayway.restassured.response.Response;
+import com.jayway.restassured.response.ResponseBody;
+import com.jayway.restassured.specification.RequestSpecification;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test class for User API testing.
@@ -21,13 +27,15 @@ public class UserTest {
     @Test
     public void testUserGet() {
         RestAssured
-                .given().header("Content-Type","application/json")
+                .given().contentType(ContentType.JSON)
                 .when().get("https://reqres.in/api/users")
                 .then().statusCode(200)
                 .and()
                 .contentType(ContentType.JSON)
-                .and().assertThat().body("data", hasItem(hasProperty("first_name", is("George"))));
+                .and().assertThat().body("data.first_name", hasItem("George"));
     }
+
+
 
     @Test
     public void testUserCreation() {
@@ -36,7 +44,7 @@ public class UserTest {
         user.put("job", "automation");
 
         RestAssured
-                .given().contentType("application/json")
+                .given().contentType(ContentType.JSON)
                 .body(user)
                 .when().post("https://reqres.in/api/users")
                 .then()
@@ -51,7 +59,7 @@ public class UserTest {
         user.put("name", "badekar");
 
         RestAssured
-                .given().contentType("application/json")
+                .given().contentType(ContentType.JSON)
                 .body(user)
                 .when().put("https://reqres.in/api/users/2")
                 .then()
