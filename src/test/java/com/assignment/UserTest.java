@@ -34,7 +34,7 @@ public class UserTest {
 
     @Test(description = "verify Get API Call ")
     public void testUserGet() {
-        given().contentType(ContentType.JSON)
+        given()
                 .when().get("/users")
                 .then().statusCode(HTTP_STATUS_CODE_OK)
                 .and()
@@ -96,7 +96,7 @@ public class UserTest {
         assertEquals(user.getPage(), new Integer(1));
         assertEquals(user.getTotal(), new Integer(12));
         assertEquals(user.getTotal_pages(), new Integer(12));
-        assertEquals(1, user.getData().stream().count());
+        assertEquals( user.getData().size(),1);
     }
 
     @Test(description = "verify Get API Call for all given query parameters for setting pagination")
@@ -108,6 +108,7 @@ public class UserTest {
         List<Integer> idList= user.getData().stream().map(Employee :: getId).collect(Collectors.toList());
         assertThat(idList, hasSize(6));
         assertThat(idList, contains(7, 8, 9, 10, 11, 12));
+
     }
 
     @Test(description = "verify Get API Call for  maximum records limit crossed : it shows 12 only as total is 12 ")
